@@ -3,28 +3,37 @@
 # Proposta de aplicativo
 
 ## Equipe
-* **Nome do Aluno(a) 1:** [Seu nome e matrícula]
-* **Nome do Aluno(a) 2:** [Seu nome e matrícula]
-* **Nome do Aluno(a) 3:** [Seu nome e matrícula]
-* ...
+* **Nome do Aluno:** José Rian Mendes Lima - 552303
 
 ---
 
 ## Título do Projeto
-[Escolha um título criativo e descritivo para o seu projeto.]
+Onde Estacionei?
+
+---
 
 ## Descrição do Projeto
-[Descreva em 2-3 parágrafos o que o seu projeto faz. Qual é o problema que ele resolve? Quem é o público-alvo? Quais são as principais funcionalidades?]
+Quem nunca passou minutos preciosos procurando o carro em um estacionamento gigante de shopping, em uma rua desconhecida ou no meio da multidão de um grande evento? Aquele momento de incerteza pode ser frustrante e consumir um tempo valioso. O "Onde Estacionei?" é um aplicativo que surge para resolver exatamente esse problema de forma simples e eficiente. 
+
+O objetivo do "Onde Estacionei?" é ser um assistente de estacionamento minimalista e confiável. Com apenas um toque, o usuário pode salvar a localização exata do seu veículo. Ao retornar, o aplicativo exibe a posição do carro e a localização atual do usuário em um mapa interativo, traçando a melhor rota a pé para o reencontro. O público-alvo são todos os motoristas que frequentam grandes centros urbanos, shoppings, aeroportos e eventos, onde encontrar o carro pode se tornar um desafio.
 
 ---
 
 ## Funcionalidades Principais
-[Liste as principais funcionalidades do projeto. Use caixas de seleção para que a equipe possa marcar as concluídas nas próximas etapas.]
 
-- [ ] Funcionalidade 1: [Breve descrição da funcionalidade]
-- [ ] Funcionalidade 2: [Breve descrição da funcionalidade]
-- [ ] Funcionalidade 3: [Breve descrição da funcionalidade]
-- [ ] ...
+- [ ] **Salvar Localização com Um Toque:** Permitir que o usuário salve sua localização GPS atual com um único botão na tela principal.
+      
+- [ ] **Visualização em Mapa Interativo:** Exibir a localização do carro (com um marcador distinto) e a posição atual do usuário em um mapa, utilizando a API do Google Maps.
+
+- [ ] **Navegação a Pé:** Traçar e exibir a rota de caminhada desde a posição atual do usuário até o local onde o carro foi estacionado.
+
+- [ ] **Endereço por Geocodificação Reversa:** Utilizar uma API de Geocodificação Reversa para converter as coordenadas GPS salvas em um endereço de rua aproximado e legível.
+
+- [ ] **Adição de Notas e Detalhes:** Permitir ao usuário adicionar informações textuais extras ao local salvo para facilitar a memorização (ex: "3º subsolo, vaga G42").
+
+- [ ] **Histórico de Locais:** Manter um histórico das últimas localizações salvas, permitindo ao usuário visualizar e gerenciar esses registros.
+
+- [ ] **Suporte a Tema Escuro/Claro:** A interface do aplicativo se adaptará automaticamente ao tema (claro ou escuro) definido nas configurações do sistema Android, utilizando MaterialTheme.
 
 ---
 
