@@ -4,9 +4,11 @@ import android.app.Application
 import android.location.Geocoder
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.maps.model.LatLng
 import io.github.rlimapro.ondeestacionei.data.AppDatabase
 import io.github.rlimapro.ondeestacionei.data.repository.ParkingRepository
 import io.github.rlimapro.ondeestacionei.model.ParkingLocation
+import io.github.rlimapro.ondeestacionei.network.config.RetrofitConfig
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -24,8 +26,7 @@ class ParkingViewModel(application: Application) : AndroidViewModel(application)
 
     init {
         val dao = AppDatabase.getDatabase(application).parkingDao()
-        repository = ParkingRepository(dao)
-
+        repository = ParkingRepository(dao, RetrofitConfig.orsApiService)
         observeLocations()
     }
 
@@ -73,6 +74,17 @@ class ParkingViewModel(application: Application) : AndroidViewModel(application)
             }
         } catch (e: Exception) {
             "Erro ao obter endereço"
+        }
+    }
+
+    fun fetchRoute(start: LatLng, end: LatLng, apiKey: String) {
+        viewModelScope.launch {
+            try {
+                val points = repository.getRoutePoints(start, end, apiKey)
+                _uiState.update { it.copy(routePoints = points) }
+            } catch (e: Exception) {
+                _uiState.update { it.copy(errorMessage = "Erro ao calcular rota") }
+            }
         }
     }
 

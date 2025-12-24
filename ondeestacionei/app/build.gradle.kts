@@ -40,6 +40,15 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
+    }
+    secrets {
+        propertiesFileName = "local.properties"
+
+        defaultPropertiesFileName = "local.properties"
+
+        ignoreList.add("keyToIgnore")
+        ignoreList.add("ignore*")
     }
 }
 
@@ -62,6 +71,9 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.google.maps.compose)
     implementation(libs.google.play.services.maps)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.gson)
+    implementation(libs.google.maps.compose.utils)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
