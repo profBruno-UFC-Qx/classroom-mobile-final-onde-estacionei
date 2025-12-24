@@ -1,6 +1,7 @@
 package io.github.rlimapro.ondeestacionei.ui
 
 import android.app.Application
+import android.location.Geocoder
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.rlimapro.ondeestacionei.data.AppDatabase
@@ -11,6 +12,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 class ParkingViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -45,18 +47,32 @@ class ParkingViewModel(application: Application) : AndroidViewModel(application)
 
     fun addLocation(lat: Double, lng: Double, note: String? = null) {
         viewModelScope.launch {
-            try {
-                val newLocation = ParkingLocation(
-                    latitude = lat,
-                    longitude = lng,
-                    timestamp = System.currentTimeMillis(),
-                    address = "Processando endereço...",
-                    note = note
-                )
-                repository.insert(newLocation)
-            } catch (e: Exception) {
-                _uiState.update { it.copy(errorMessage = "Erro ao salvar: ${e.message}") }
+
+            val addressName = getAddressFromCoords(lat, lng)
+
+            val newLocation = ParkingLocation(
+                latitude = lat,
+                longitude = lng,
+                timestamp = System.currentTimeMillis(),
+                address = addressName,
+                note = note
+            )
+            repository.insert(newLocation)
+        }
+    }
+
+    private fun getAddressFromCoords(lat: Double, lng: Double): String {
+        return try {
+            val geocoder = Geocoder(getApplication(), Locale.getDefault())
+            val addresses = geocoder.getFromLocation(lat, lng, 1)
+            if (!addresses.isNullOrEmpty()) {
+                val address = addresses[0]
+                "${address.thoroughfare ?: "Rua desconhecida"}, ${address.subThoroughfare ?: "S/N"} - ${address.subLocality ?: ""}"
+            } else {
+                "Endereço não encontrado"
             }
+        } catch (e: Exception) {
+            "Erro ao obter endereço"
         }
     }
 

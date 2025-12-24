@@ -19,6 +19,7 @@ import io.github.rlimapro.ondeestacionei.ui.ParkingViewModel
 import io.github.rlimapro.ondeestacionei.ui.Screen
 import io.github.rlimapro.ondeestacionei.ui.screen.HistoryScreen
 import io.github.rlimapro.ondeestacionei.ui.screen.MainScreen
+import io.github.rlimapro.ondeestacionei.ui.screen.MapScreen
 import io.github.rlimapro.ondeestacionei.ui.theme.OndeEstacioneiTheme
 
 class MainActivity : ComponentActivity() {
@@ -34,11 +35,16 @@ class MainActivity : ComponentActivity() {
                         MainScreen(
                             viewModel = viewModel,
                             onNavigateToHistory = { navController.navigate(Screen.History.route) },
-                            onNavigateToMap = {  }
+                            onNavigateToMap = { navController.navigate(Screen.Map.route) }
                         )
                     }
+
                     composable(Screen.History.route) {
                         HistoryScreen(viewModel = viewModel)
+                    }
+
+                    composable(Screen.Map.route) {
+                        MapScreen(viewModel = viewModel)
                     }
                 }
             }

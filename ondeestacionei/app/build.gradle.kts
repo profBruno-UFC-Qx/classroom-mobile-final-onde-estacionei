@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.secrets.gradle.plugin)
 }
 
 android {
@@ -59,6 +60,8 @@ dependencies {
     implementation(libs.google.play.services.location)
     implementation(libs.accompanist.permissions)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.google.maps.compose)
+    implementation(libs.google.play.services.maps)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
