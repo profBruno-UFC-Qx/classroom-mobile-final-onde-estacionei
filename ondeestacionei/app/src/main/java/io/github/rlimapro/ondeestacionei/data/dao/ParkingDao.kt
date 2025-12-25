@@ -14,6 +14,9 @@ interface ParkingDao {
     @Query("SELECT * FROM parking_locations ORDER BY timestamp DESC")
     fun getAllLocations(): Flow<List<ParkingLocation>>
 
+    @Query("SELECT * FROM parking_locations ORDER BY timestamp DESC LIMIT 1")
+    suspend fun getLatestLocation(): ParkingLocation?
+
     @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
     suspend fun insertLocation(location: ParkingLocation)
 
