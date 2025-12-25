@@ -88,7 +88,8 @@ class ParkingViewModel(application: Application) : AndroidViewModel(application)
     fun fetchRoute(start: LatLng, end: LatLng, apiKey: String) {
         viewModelScope.launch {
             try {
-                val points = repository.getRoutePoints(start, end, apiKey)
+                val mode = _uiState.value.currentMode.profile
+                val points = repository.getRoutePoints(start, end, apiKey, mode)
                 _uiState.update { it.copy(routePoints = points) }
             } catch (e: Exception) {
                 _uiState.update { it.copy(errorMessage = "Erro ao calcular rota") }
@@ -106,6 +107,10 @@ class ParkingViewModel(application: Application) : AndroidViewModel(application)
         viewModelScope.launch {
             repository.update(location)
         }
+    }
+
+    fun updateTransportMode(mode: TransportMode) {
+        _uiState.update { it.copy(currentMode = mode) }
     }
 
     fun clearErrorMessage() {
