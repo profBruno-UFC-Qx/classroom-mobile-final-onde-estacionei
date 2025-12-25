@@ -6,12 +6,15 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.LatLng
 import io.github.rlimapro.ondeestacionei.data.AppDatabase
+import io.github.rlimapro.ondeestacionei.data.SettingsManager
 import io.github.rlimapro.ondeestacionei.data.repository.ParkingRepository
 import io.github.rlimapro.ondeestacionei.model.ParkingLocation
 import io.github.rlimapro.ondeestacionei.network.config.RetrofitConfig
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.util.Locale
@@ -19,6 +22,11 @@ import java.util.Locale
 class ParkingViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository: ParkingRepository
+    private val settingsManager = SettingsManager(application)
+
+    val showNotePreference = settingsManager.showNoteDialog.stateIn(
+        viewModelScope, SharingStarted.WhileSubscribed(5000), true
+    )
 
     private val _uiState = MutableStateFlow(ParkingUiState())
 
@@ -102,5 +110,9 @@ class ParkingViewModel(application: Application) : AndroidViewModel(application)
 
     fun clearErrorMessage() {
         _uiState.update { it.copy(errorMessage = null) }
+    }
+
+    fun toggleNotePreference(enabled: Boolean) {
+        viewModelScope.launch { settingsManager.setShowNoteDialog(enabled) }
     }
 }
