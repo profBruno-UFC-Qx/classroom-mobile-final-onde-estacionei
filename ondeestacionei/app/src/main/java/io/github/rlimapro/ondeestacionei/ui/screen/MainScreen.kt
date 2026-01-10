@@ -197,17 +197,14 @@ fun MainScreen(
                             handleParkingButtonClick(
                                 locationPermissionState = locationPermissionState,
                                 fusedLocationClient = fusedLocationClient,
-                                showNotePref = showNotePref,
-                                onLocationReceived = { location ->
+                                onLocationFetched = { location ->
                                     lastKnownLocation = location
-                                    showDialog = true
-                                },
-                                onLocationReceivedNoDialog = { location ->
-                                    viewModel.addLocation(
-                                        location.latitude,
-                                        location.longitude,
-                                        null
-                                    )
+
+                                    if (showNotePref) {
+                                        showDialog = true
+                                    } else {
+                                        viewModel.addLocation(location.latitude, location.longitude, null)
+                                    }
                                 }
                             )
                         }
@@ -246,17 +243,11 @@ fun StatusBanner(
 private fun handleParkingButtonClick(
     locationPermissionState: PermissionState,
     fusedLocationClient: FusedLocationProviderClient,
-    showNotePref: Boolean,
-    onLocationReceived: (android.location.Location) -> Unit,
-    onLocationReceivedNoDialog: (android.location.Location) -> Unit
+    onLocationFetched: (android.location.Location) -> Unit
 ) {
     if (locationPermissionState.status.isGranted) {
         getCurrentLocation(fusedLocationClient) { location ->
-            if (showNotePref) {
-                onLocationReceived(location)
-            } else {
-                onLocationReceivedNoDialog(location)
-            }
+            onLocationFetched(location)
         }
     } else {
         locationPermissionState.launchPermissionRequest()
@@ -269,6 +260,14 @@ private fun getCurrentLocation(
     onLocationReceived: (android.location.Location) -> Unit
 ) {
     fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-        location?.let { onLocationReceived(it) }
+        if (location != null) {
+            onLocationReceived(location)
+        } else {
+            val priority = Priority.PRIORITY_HIGH_ACCURACY
+            fusedLocationClient.getCurrentLocation(priority, null)
+                .addOnSuccessListener { freshLocation ->
+                    freshLocation?.let { onLocationReceived(it) }
+                }
+        }
     }
 }

@@ -11,6 +11,7 @@ import io.github.rlimapro.ondeestacionei.data.repository.ParkingRepository
 import io.github.rlimapro.ondeestacionei.model.ParkingLocation
 import io.github.rlimapro.ondeestacionei.network.config.RetrofitConfig
 import io.github.rlimapro.ondeestacionei.network.NetworkMonitor
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -62,8 +63,7 @@ class ParkingViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun addLocation(lat: Double, lng: Double, note: String? = null) {
-        viewModelScope.launch {
-
+        viewModelScope.launch(Dispatchers.IO) {
             val addressName = getAddressFromCoords(lat, lng)
 
             val newLocation = ParkingLocation(
