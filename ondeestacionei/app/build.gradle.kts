@@ -73,6 +73,7 @@ dependencies {
     implementation(libs.google.play.services.maps)
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.gson)
+    implementation(libs.okhttp)
     implementation(libs.google.maps.compose.utils)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.androidx.glance.appwidget)

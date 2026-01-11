@@ -16,10 +16,9 @@ class ParkingRepository(
     suspend fun update(location: ParkingLocation) = parkingDao.updateLocation(location)
     suspend fun delete(location: ParkingLocation) = parkingDao.deleteLocation(location)
 
-    suspend fun getRoutePoints(start: LatLng, end: LatLng, apiKey: String, mode: String): List<LatLng> {
+    suspend fun getRoutePoints(start: LatLng, end: LatLng, mode: String): List<LatLng> {
         val response = orsApi.getRoute(
             profile = mode,
-            apiKey = apiKey,
             start = "${start.longitude},${start.latitude}",
             end = "${end.longitude},${end.latitude}"
         )

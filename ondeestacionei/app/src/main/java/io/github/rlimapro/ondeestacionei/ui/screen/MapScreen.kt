@@ -19,7 +19,6 @@ import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.model.LatLng
-import io.github.rlimapro.ondeestacionei.BuildConfig
 import io.github.rlimapro.ondeestacionei.ui.ParkingViewModel
 import io.github.rlimapro.ondeestacionei.ui.components.EmptyMapState
 import io.github.rlimapro.ondeestacionei.ui.components.MapContent
@@ -39,7 +38,6 @@ fun MapScreen(
     val fusedLocationClient = remember {
         LocationServices.getFusedLocationProviderClient(context)
     }
-    val orsKey = BuildConfig.ORS_API_KEY
 
     DisposableEffect(carLocation, state.currentMode) {
         val locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 10000)
@@ -50,11 +48,9 @@ fun MapScreen(
             override fun onLocationResult(result: LocationResult) {
                 val userLoc = result.lastLocation ?: return
                 val carLoc = carLocation ?: return
-
                 viewModel.fetchRoute(
                     start = LatLng(userLoc.latitude, userLoc.longitude),
-                    end = LatLng(carLoc.latitude, carLoc.longitude),
-                    apiKey = orsKey
+                    end = LatLng(carLoc.latitude, carLoc.longitude)
                 )
             }
         }

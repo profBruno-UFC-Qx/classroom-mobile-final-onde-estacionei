@@ -9,7 +9,6 @@ interface OrsApiService {
     @GET("v2/directions/{profile}")
     suspend fun getRoute(
         @Path("profile") profile: String,
-        @Query("api_key") apiKey: String,
         @Query("start") start: String,
         @Query("end") end: String
     ): OrsResponse
