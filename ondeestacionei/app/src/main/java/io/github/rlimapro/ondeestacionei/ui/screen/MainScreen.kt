@@ -78,24 +78,22 @@ fun MainScreen(
         val locationRequest = LocationRequest.Builder(
             Priority.PRIORITY_HIGH_ACCURACY, 1000
         ).build()
-        val builder = LocationSettingsRequest.Builder()
+
+        val settingsRequest = LocationSettingsRequest.Builder()
             .addLocationRequest(locationRequest)
-        val client = LocationServices.getSettingsClient(context)
-        val task = client.checkLocationSettings(builder.build())
+            .build()
 
-        task.addOnSuccessListener { viewModel.updateGpsStatus(true) }
-        task.addOnFailureListener { exception ->
-            viewModel.updateGpsStatus(false)
-            if (exception is ResolvableApiException) {
-                try {
-                    exception.startResolutionForResult(context as android.app.Activity, 1001)
-                } catch (sendEx: Exception) { /* Ignorar */ }
+        LocationServices.getSettingsClient(context)
+            .checkLocationSettings(settingsRequest)
+            .addOnFailureListener { exception ->
+                if (exception is ResolvableApiException) {
+                    try {
+                        exception.startResolutionForResult(context as android.app.Activity, 1001)
+                    } catch (sendEx: Exception) {
+                        android.util.Log.e("MainScreen", "Erro ao abrir diálogo de GPS", sendEx)
+                    }
+                }
             }
-        }
-    }
-
-    LaunchedEffect(Unit) {
-        checkLocationSettings()
     }
 
     if (showDialog) {

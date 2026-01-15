@@ -1,4 +1,4 @@
-package io.github.rlimapro.ondeestacionei.network
+package io.github.rlimapro.ondeestacionei.utils
 
 import android.content.Context
 import android.net.ConnectivityManager
@@ -13,8 +13,13 @@ class NetworkMonitor(context: Context) {
 
     val isOnline: Flow<Boolean> = callbackFlow {
         val callback = object : ConnectivityManager.NetworkCallback() {
-            override fun onAvailable(network: Network) { trySend(true) }
-            override fun onLost(network: Network) { trySend(false) }
+            override fun onAvailable(network: Network) {
+                trySend(true)
+            }
+
+            override fun onLost(network: Network) {
+                trySend(false)
+            }
         }
 
         connectivityManager.registerDefaultNetworkCallback(callback)

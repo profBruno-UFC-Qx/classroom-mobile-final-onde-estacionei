@@ -10,7 +10,8 @@ import io.github.rlimapro.ondeestacionei.data.SettingsManager
 import io.github.rlimapro.ondeestacionei.data.repository.ParkingRepository
 import io.github.rlimapro.ondeestacionei.model.ParkingLocation
 import io.github.rlimapro.ondeestacionei.network.config.RetrofitConfig
-import io.github.rlimapro.ondeestacionei.network.NetworkMonitor
+import io.github.rlimapro.ondeestacionei.utils.GpsMonitor
+import io.github.rlimapro.ondeestacionei.utils.NetworkMonitor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -23,6 +24,7 @@ import java.util.Locale
 
 class ParkingViewModel(application: Application) : AndroidViewModel(application) {
     private val networkMonitor = NetworkMonitor(application)
+    private val gpsMonitor = GpsMonitor(application)
     private val repository: ParkingRepository
     private val settingsManager = SettingsManager(application)
 
@@ -42,6 +44,12 @@ class ParkingViewModel(application: Application) : AndroidViewModel(application)
         viewModelScope.launch {
             networkMonitor.isOnline.collect { online ->
                 _uiState.update { it.copy(isOnline = online) }
+            }
+        }
+
+        viewModelScope.launch {
+            gpsMonitor.isGpsEnabled.collect { enabled ->
+                _uiState.update { it.copy(isGpsEnabled = enabled) }
             }
         }
     }
@@ -122,9 +130,5 @@ class ParkingViewModel(application: Application) : AndroidViewModel(application)
 
     fun toggleNotePreference(enabled: Boolean) {
         viewModelScope.launch { settingsManager.setShowNoteDialog(enabled) }
-    }
-
-    fun updateGpsStatus(enabled: Boolean) {
-        _uiState.update { it.copy(isGpsEnabled = enabled) }
     }
 }
