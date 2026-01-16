@@ -37,7 +37,6 @@ fun HistoryScreen(
 
     var locationToEdit by remember { mutableStateOf<ParkingLocation?>(null) }
     var noteText by remember { mutableStateOf("") }
-    var showDeleteDialog by remember { mutableStateOf(false) }
     var locationToDelete by remember { mutableStateOf<ParkingLocation?>(null) }
 
     // Dialog de edição de nota
@@ -60,15 +59,13 @@ fun HistoryScreen(
     }
 
     // Dialog de confirmação de exclusão
-    if (showDeleteDialog && locationToDelete != null) {
+    if (locationToDelete != null) {
         DeleteConfirmationDialog(
             onConfirm = {
                 locationToDelete?.let { viewModel.deleteLocation(it) }
-                showDeleteDialog = false
                 locationToDelete = null
             },
             onDismiss = {
-                showDeleteDialog = false
                 locationToDelete = null
             }
         )
@@ -108,7 +105,6 @@ fun HistoryScreen(
                             },
                             onDelete = {
                                 locationToDelete = location
-                                showDeleteDialog = true
                             }
                         )
                     }

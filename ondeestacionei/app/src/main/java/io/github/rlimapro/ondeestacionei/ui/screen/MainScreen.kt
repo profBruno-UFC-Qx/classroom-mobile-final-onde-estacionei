@@ -2,6 +2,7 @@ package io.github.rlimapro.ondeestacionei.ui.screen
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.location.Location
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -23,7 +24,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -64,7 +64,7 @@ fun MainScreen(
 
     var showDialog by remember { mutableStateOf(false) }
     var tempNote by remember { mutableStateOf("") }
-    var lastKnownLocation by remember { mutableStateOf<android.location.Location?>(null) }
+    var lastKnownLocation by remember { mutableStateOf<Location?>(null) }
 
     val context = LocalContext.current
     val fusedLocationClient = remember {
@@ -241,7 +241,7 @@ fun StatusBanner(
 private fun handleParkingButtonClick(
     locationPermissionState: PermissionState,
     fusedLocationClient: FusedLocationProviderClient,
-    onLocationFetched: (android.location.Location) -> Unit
+    onLocationFetched: (Location) -> Unit
 ) {
     if (locationPermissionState.status.isGranted) {
         getCurrentLocation(fusedLocationClient) { location ->
@@ -255,7 +255,7 @@ private fun handleParkingButtonClick(
 @SuppressLint("MissingPermission")
 private fun getCurrentLocation(
     fusedLocationClient: FusedLocationProviderClient,
-    onLocationReceived: (android.location.Location) -> Unit
+    onLocationReceived: (Location) -> Unit
 ) {
     fusedLocationClient.lastLocation.addOnSuccessListener { location ->
         if (location != null) {
